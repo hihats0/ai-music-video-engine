@@ -3,7 +3,9 @@ scene:
   title: İsimsiz sahne
   status: draft
   created_at: null
+  mode: group
 
+# Backward-compatible single-character field. New group scenes use cast below.
 identity:
   character_id: null
   identity_strength: strict
@@ -11,13 +13,30 @@ identity:
   preserve_hair: true
   preserve_facial_hair: true
 
+cast: []
+# Cast item example:
+# - id: sueda
+#   identity_id: sueda
+#   role: lead
+#   look: look_main
+#   position:
+#     x: 0.08
+#     y: 0.18
+#     width: 0.24
+#     height: 0.72
+#     depth: front
+#   face_priority: high
+#   action: "subtle performance stance"
+#   allow_occlusion: false
+
 composition:
   location: ""
   time_of_day: ""
   wardrobe: ""
-  shot_type: medium_closeup
+  shot_type: medium_wide
   camera_angle: eye_level
-  framing: centered
+  framing: layered_group
+  lens_mm: 35
 
 lighting:
   style: ""
@@ -33,17 +52,34 @@ movement:
   head_motion_strength: low
 
 style:
-  visual_style: cinematic
+  visual_style: cinematic_photorealism
   mood: ""
   color_description: ""
   film_texture: subtle
 
 generation:
-  preset: draft
+  preset: group_realism_7
   duration_seconds: 4
-  alternatives: 2
+  alternatives: 3
   seed: random
   workflow: auto
+  width: 832
+  height: 480
+
+lipsync:
+  enabled: false
+  target_identity: null
+  source_audio: null
+  start_seconds: null
+  end_seconds: null
+
+postprocess:
+  upscale: true
+  interpolation: true
+  target_width: 1280
+  target_height: 720
+  target_fps: 24
+  learned_upscale: false
 
 references:
   pose_image: null
@@ -55,7 +91,9 @@ rules:
   allow_fast_head_rotation: false
   allow_face_occlusion: false
   allow_extreme_profile: false
-  allow_multiple_main_faces: false
+  allow_multiple_main_faces: true
+  maximum_characters: 7
+  maximum_high_priority_faces: 3
 
 approval:
   start_frame_approved: false

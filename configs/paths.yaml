@@ -1,0 +1,22 @@
+paths:
+  root: .
+  comfyui: ./comfyui/runtime
+  workflows: ./workflows
+  identities: ./identities
+  projects: ./projects
+  prompts: ./prompts
+  logs: ./logs
+  runtime: ./runtime
+  models_manifest: ./models_manifest
+
+runtime:
+  jobs: ./runtime/jobs
+  locks: ./runtime/locks
+  cache: ./runtime/cache
+  temp: ./runtime/temp
+
+logs:
+  engine: ./logs/engine
+  generations: ./logs/generations
+  failures: ./logs/failures
+  diagnostics: ./logs/diagnostics

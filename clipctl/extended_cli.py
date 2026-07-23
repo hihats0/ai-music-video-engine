@@ -16,6 +16,7 @@ from .group_frame_generation import (
     GROUP_FRAME_REQUIRED_NODES,
     generate_group_master_frames,
 )
+from .group_video_generation import generate_group_video
 from .identity_models import identity_model_status, install_identity_assets
 from .models import download_models, model_status, write_inventory
 from .multicast import (
@@ -143,11 +144,15 @@ def _recursive_frames(project: str, scene: str) -> list[Path]:
 def _intercept(argv: list[str]) -> bool:
     if not argv:
         return False
-    return argv[0] in {"identity-model", "quality", "postprocess", "goal", "multicast"} or (
-        argv[0] == "frame" and len(argv) > 1 and argv[1] in {
-            "generate", "generate-retry", "group-generate", "group-generate-retry", "list"
-        }
-    )
+    if argv[0] in {"identity-model", "quality", "postprocess", "goal", "multicast"}:
+        return True
+    if argv[0] == "frame" and len(argv) > 1 and argv[1] in {
+        "generate", "generate-retry", "group-generate", "group-generate-retry", "list"
+    }:
+        return True
+    return argv[0] == "video" and len(argv) > 1 and argv[1] in {
+        "group-generate", "group-generate-retry"
+    }
 
 
 def _multicast_dispatch(argv: list[str]) -> int:
@@ -261,6 +266,30 @@ def dispatch(argv: list[str], journal: RunJournal) -> int:
             result = generate_reference_frames(project, scene, low_vram=True, journal=journal)
         show(result)
         ok("Başlangıç karesi adayları üretildi.")
+        return 0
+    if group == "video" and action in {"group-generate", "group-generate-retry"}:
+        if len(argv) < 4:
+            raise UserError("Kullanım: clipctl.bat video group-generate <proje> <sahne>")
+        try:
+            result = generate_group_video(
+                argv[2],
+                argv[3],
+                retry=(action == "group-generate-retry"),
+                journal=journal,
+            )
+        except (UserError, ComfyAPIError) as exc:
+            if action != "group-generate" or not _looks_like_oom(exc):
+                raise
+            journal.event(
+                "group_video.retry",
+                status="retrying",
+                reason="cuda_out_of_memory",
+                profile="704x400",
+            )
+            info("Group video üretiminde VRAM yetmedi; bir kez 704x400 deneniyor.")
+            result = generate_group_video(argv[2], argv[3], retry=True, journal=journal)
+        show(result)
+        ok("Multi-character group video üretildi.")
         return 0
     if group == "quality":
         if len(argv) < 4:

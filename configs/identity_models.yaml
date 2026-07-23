@@ -1,0 +1,41 @@
+model_root: comfyui/runtime/models
+custom_node:
+  id: comfyui_ipadapter_plus
+  repository: https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
+  destination: comfyui/runtime/custom_nodes/ComfyUI_IPAdapter_plus
+  license: GPL-3.0
+  maintenance_note: Upstream entered maintenance-only mode on 2025-04-14.
+
+group:
+  id: sdxl_ipadapter_portrait
+  title: SDXL + IPAdapter Plus Face portrait identity starter
+  required_free_space_gb: 13
+  identity_mode: portrait_reference
+  biometric_embedding: false
+  license_summary: SDXL OpenRAIL++ restrictions; IP-Adapter weights Apache-2.0; custom node GPL-3.0.
+  files:
+    - id: sdxl_base
+      destination: checkpoints/sd_xl_base_1.0.safetensors
+      url: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors?download=true
+      minimum_bytes: 6800000000
+    - id: clip_vision_vit_h
+      destination: clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors
+      url: https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors?download=true
+      minimum_bytes: 2500000000
+      sha256: 6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030
+    - id: ipadapter_plus_face_sdxl
+      destination: ipadapter/ip-adapter-plus-face_sdxl_vit-h.safetensors
+      url: https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus-face_sdxl_vit-h.safetensors?download=true
+      minimum_bytes: 840000000
+      sha256: 677ad8860204f7d0bfba12d29e6c31ded9beefdf3e4bbd102518357d31a292c1
+
+required_nodes:
+  - CheckpointLoaderSimple
+  - LoadImage
+  - IPAdapterUnifiedLoader
+  - IPAdapterAdvanced
+  - CLIPTextEncode
+  - EmptyLatentImage
+  - KSampler
+  - VAEDecode
+  - SaveImage

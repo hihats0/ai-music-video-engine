@@ -28,6 +28,21 @@ def _uploaded_name(response: dict[str, Any]) -> str:
     return f"{folder}/{name}" if folder else name
 
 
+def _lock_path() -> Path:
+    return ROOT / "runtime" / "locks" / "gpu.lock"
+
+
+def _acquire_lock(project: str, scene: str) -> None:
+    path = _lock_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        raise UserError("Başka bir GPU işi çalışıyor. clipctl.bat job status ile kontrol et.")
+    path.write_text(
+        json.dumps({"kind": "start_frame", "project": project, "scene": scene, "started_at": now_iso()}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
 def build_reference_frame_workflow(
     image_name: str,
     positive: str,
@@ -92,29 +107,31 @@ def generate_reference_frames(
     run_dir = scene_path(project, scene) / "frames" / ("generated_" + now_iso().replace(":", "-"))
     run_dir.mkdir(parents=True, exist_ok=True)
     outputs: list[str] = []
-
-    for index in range(count):
-        workflow = build_reference_frame_workflow(
-            _uploaded_name(upload), positive, negative,
-            f"clipctl/{project}/{scene}/frame_{index + 1:02d}",
-            low_vram=low_vram,
-        )
-        workflow = validate_and_adapt_prompt(workflow)
-        (run_dir / f"workflow_{index + 1:02d}.json").write_text(
-            json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
-        queued = comfy_api.queue_prompt(workflow)
-        prompt_id = str(queued["prompt_id"])
-        if journal:
-            journal.event("frame.queued", project=project, scene=scene, prompt_id=prompt_id)
-        history = comfy_api.wait_for_prompt(prompt_id, timeout=3600)
-        files = [item for item in comfy_api.extract_output_files(history) if item.get("kind") == "images"]
-        if not files:
-            raise UserError("ComfyUI kare işi tamamlandı fakat görsel çıktı yok.")
-        for file_index, info in enumerate(files, start=1):
-            suffix = Path(info["filename"]).suffix or ".png"
-            target = run_dir / f"candidate_{index + 1:02d}_{file_index:02d}{suffix}"
-            comfy_api.download_output(info, target)
-            outputs.append(str(target.relative_to(ROOT)))
-
+    _acquire_lock(project, scene)
+    try:
+        for index in range(count):
+            workflow = build_reference_frame_workflow(
+                _uploaded_name(upload), positive, negative,
+                f"clipctl/{project}/{scene}/frame_{index + 1:02d}",
+                low_vram=low_vram,
+            )
+            workflow = validate_and_adapt_prompt(workflow)
+            (run_dir / f"workflow_{index + 1:02d}.json").write_text(
+                json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            queued = comfy_api.queue_prompt(workflow)
+            prompt_id = str(queued["prompt_id"])
+            if journal:
+                journal.event("frame.queued", project=project, scene=scene, prompt_id=prompt_id)
+            history = comfy_api.wait_for_prompt(prompt_id, timeout=3600)
+            files = [item for item in comfy_api.extract_output_files(history) if item.get("kind") == "images"]
+            if not files:
+                raise UserError("ComfyUI kare işi tamamlandı fakat görsel çıktı yok.")
+            for file_index, info in enumerate(files, start=1):
+                suffix = Path(info["filename"]).suffix or ".png"
+                target = run_dir / f"candidate_{index + 1:02d}_{file_index:02d}{suffix}"
+                comfy_api.download_output(info, target)
+                outputs.append(str(target.relative_to(ROOT)))
+    finally:
+        _lock_path().unlink(missing_ok=True)
     return {"run_dir": str(run_dir.relative_to(ROOT)), "outputs": outputs}

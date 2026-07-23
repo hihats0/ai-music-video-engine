@@ -13,6 +13,14 @@ set "LOGFILE=%LOGDIR%\server.log"
 
 if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 
+echo ===== ComfyUI layout check %DATE% %TIME% =====>>"%LOGFILE%"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%COMFY_ROOT%\ensure_portable_layout.ps1" >>"%LOGFILE%" 2>&1
+if %ERRORLEVEL% neq 0 (
+  echo [HATA] ComfyUI portable klasor baglantisi otomatik onarilamadi.
+  echo [BILGI] Ayrinti: %LOGFILE%
+  exit /b 1
+)
+
 if not exist "%PY%" (
   echo [HATA] Embedded Python bulunamadi: %PY%
   exit /b 1
@@ -20,13 +28,11 @@ if not exist "%PY%" (
 
 if not exist "%MAIN%" (
   echo [HATA] ComfyUI main.py bulunamadi: %MAIN%
-  echo [BILGI] 2. ASAMA v0.2.2 paketini yeniden uygula.
   exit /b 1
 )
 
 if not exist "%COMFY_PACKAGE%" (
   echo [HATA] ComfyUI comfy paketi bulunamadi: %COMFY_PACKAGE%
-  echo [BILGI] comfyui\ComfyUI baglantisi runtime klasorune gitmelidir.
   exit /b 1
 )
 

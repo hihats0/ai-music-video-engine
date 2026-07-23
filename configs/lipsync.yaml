@@ -1,0 +1,37 @@
+version: 1
+backend: musetalk_v15
+repository: https://github.com/TMElyralab/MuseTalk.git
+root: tools/MuseTalk
+python: tools/MuseTalk/.venv/Scripts/python.exe
+result_root: runtime/lipsync
+recommended_input_fps: 25
+
+models:
+  unet: models/musetalkV15/unet.pth
+  unet_config: models/musetalkV15/musetalk.json
+  sd_vae_config: models/sd-vae/config.json
+  sd_vae_weights: models/sd-vae/diffusion_pytorch_model.bin
+  whisper_config: models/whisper/config.json
+  whisper_weights: models/whisper/pytorch_model.bin
+  whisper_preprocessor: models/whisper/preprocessor_config.json
+  face_parse: models/face-parse-bisent/79999_iter.pth
+  face_parse_resnet: models/face-parse-bisent/resnet18-5c106cde.pth
+
+inference:
+  module: scripts.inference
+  version: v15
+  use_float16: true
+  bbox_shift: 0
+  batch_size: 4
+  extra_margin: 10
+  parsing_mode: jaw
+  left_cheek_width: 90
+  right_cheek_width: 90
+
+policy:
+  solo_only: true
+  explicit_permission_required: true
+  preserve_source: true
+  preprocess_to_fps: 25
+  allow_group_scene: false
+  output_is_separate: true

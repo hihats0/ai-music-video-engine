@@ -1,0 +1,30 @@
+project:
+  id: _template
+  title: Yeni müzik klibi projesi
+  created_at: null
+  updated_at: null
+
+format:
+  aspect_ratio: 16:9
+  target_width: 1920
+  target_height: 1080
+  raw_generation_resolution: preset
+  final_editing_external: true
+
+editing:
+  handled_by_user: true
+  preferred_editor: null
+  engine_must_not_create_timeline: true
+
+identities: []
+scenes: []
+
+defaults:
+  quality_preset: draft
+  duration_seconds: 4
+  alternatives: 2
+
+status:
+  state: created
+  total_scenes: 0
+  approved_scenes: 0

@@ -16,15 +16,34 @@ editing:
   preferred_editor: null
   engine_must_not_create_timeline: true
 
+pipeline:
+  architecture: cast_first
+  maximum_cast_size: 7
+  group_keyframe_first: true
+  group_lipsync_enabled: false
+  solo_lipsync_enabled: true
+  preserve_generation_sources: true
+
+files:
+  cast: cast.yaml
+  wardrobe: wardrobe.yaml
+  continuity: continuity.yaml
+
 identities: []
 scenes: []
 
 defaults:
-  quality_preset: draft
+  quality_preset: group_realism_7
   duration_seconds: 4
-  alternatives: 2
+  alternatives: 3
+  group_resolution: 832x480
+  low_vram_resolution: 704x400
+  final_resolution: 1280x720
+  final_fps: 24
 
 status:
   state: created
   total_scenes: 0
   approved_scenes: 0
+  cast_ready: false
+  wardrobe_ready: false

@@ -12,6 +12,13 @@ comfyui/python_embeded/
 comfyui/update/
 comfyui/user/
 
+# Optional third-party local runtimes
+tools/MuseTalk/
+tools/Real-ESRGAN/
+tools/realesrgan/
+tools/RIFE/
+tools/rife/
+
 # Models and generated media
 models/
 **/models/
@@ -47,6 +54,7 @@ runtime/temp/*
 runtime/cache/*
 runtime/jobs/*
 runtime/locks/*
+runtime/lipsync/*
 !runtime/**/.gitkeep
 recovery/stage*_backup_*/
 recovery/**/*backup*/

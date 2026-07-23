@@ -8,9 +8,14 @@ if not exist "comfyui\python_embeded\python.exe" (
   exit /b 1
 )
 
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%CD%\comfyui\ensure_portable_layout.ps1"
+if %ERRORLEVEL% neq 0 (
+  echo [HATA] ComfyUI portable klasor baglantisi otomatik onarilamadi.
+  exit /b 1
+)
+
 if not exist "comfyui\ComfyUI\main.py" (
   echo [HATA] ComfyUI portable klasor baglantisi bulunamadi.
-  echo [BILGI] 2. ASAMA v0.2.2 paketini uygula.
   exit /b 1
 )
 

@@ -1,0 +1,16 @@
+server:
+  host: "127.0.0.1"
+  port: 8188
+  browser_auto_launch: false
+  manager_enabled: false
+
+runtime:
+  main: "./comfyui/ComfyUI/main.py"
+  embedded_python: "./comfyui/python_embeded/python.exe"
+  log: "./logs/comfyui/server.log"
+
+security:
+  local_only: true
+  allow_lan: false
+  automatic_custom_node_install: false
+  automatic_manager_enable: false

@@ -1,0 +1,38 @@
+version: 1
+hardware_profile: rtx4070_mobile_8gb
+
+frame:
+  mode: approved_reference
+  output_width: 1280
+  output_height: 720
+  alternatives: 4
+  note: Identity-preserving scene regeneration is an optional licensed extension. The base pipeline uses a user-approved reference/start frame.
+
+video:
+  model_group: wan22_5b
+  width: 832
+  height: 480
+  fps: 24
+  duration_seconds: 4
+  frames: 97
+  steps: 20
+  cfg: 5.0
+  sampler: uni_pc
+  scheduler: simple
+  shift: 8.0
+  timeout_seconds: 10800
+  filename_prefix: clipctl/scene
+
+quality:
+  minimum_width: 640
+  minimum_height: 360
+  minimum_duration_seconds: 3.5
+  maximum_duration_seconds: 5.5
+  require_16_9_tolerance: 0.08
+
+recovery:
+  retry_count: 1
+  retry_width: 704
+  retry_height: 400
+  retry_frames: 81
+  collect_diagnostics_on_failure: true

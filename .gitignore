@@ -50,10 +50,12 @@ runtime/locks/*
 !runtime/**/.gitkeep
 recovery/stage*_backup_*/
 recovery/**/*backup*/
+recovery/github_connect_backup_*/
 
-# Local completion markers
+# Local completion and connection markers
 STAGE_*_COMPLETE*.txt
 STAGE_*_REPAIRED*.txt
+GITHUB_CONNECTED.txt
 
 # OS and editor
 .DS_Store

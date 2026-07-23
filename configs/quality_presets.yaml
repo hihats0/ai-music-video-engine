@@ -1,0 +1,36 @@
+presets:
+  draft:
+    description: Hızlı hareket ve kompozisyon denemesi
+    width: 640
+    height: 360
+    fps: 16
+    frames: 49
+    approximate_duration_seconds: 3.06
+    steps: 12
+    alternatives_default: 1
+    face_check: false
+    upscale: false
+
+  balanced:
+    description: Normal sahne üretimi
+    width: 768
+    height: 432
+    fps: 16
+    frames: 65
+    approximate_duration_seconds: 4.06
+    steps: 20
+    alternatives_default: 2
+    face_check: true
+    upscale: false
+
+  quality:
+    description: Seçilen sahnenin kaliteli üretimi
+    width: 832
+    height: 480
+    fps: 16
+    frames: 81
+    approximate_duration_seconds: 5.06
+    steps: 26
+    alternatives_default: 3
+    face_check: true
+    upscale: false

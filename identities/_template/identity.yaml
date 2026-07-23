@@ -1,0 +1,42 @@
+identity:
+  id: _template
+  display_name: Yeni kişi
+  created_at: null
+
+permission:
+  confirmed: false
+  confirmation_note: ""
+
+references:
+  front: null
+  left_45: null
+  right_45: null
+  profile_left: null
+  profile_right: null
+  full_body: null
+
+appearance:
+  hair_description: ""
+  facial_hair_description: ""
+  distinguishing_features: ""
+  default_wardrobe_notes: ""
+
+preservation:
+  face_strength: strict
+  preserve_hairline: true
+  preserve_skin_texture: true
+  preserve_face_shape: true
+  avoid_beautification: true
+
+limitations:
+  maximum_head_rotation: medium
+  allow_profile_generation: true
+  allow_face_repair: true
+
+models:
+  face_model: null
+  identity_embedding: null
+
+status:
+  references_checked: false
+  identity_ready: false

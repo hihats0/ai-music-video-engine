@@ -1,18 +1,17 @@
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from .core import ROOT, UserError, load_yaml, scene_path
+from .media_tools import find_ffmpeg
 
 
 def tool_status() -> dict[str, Any]:
-    ffmpeg = shutil.which("ffmpeg")
-    ffprobe = shutil.which("ffprobe")
-    return {"ffmpeg": ffmpeg, "ffprobe": ffprobe, "ready": bool(ffmpeg and ffprobe)}
+    ffmpeg = find_ffmpeg()
+    return {"ffmpeg": str(ffmpeg) if ffmpeg else None, "ready": ffmpeg is not None}
 
 
 def find_video(project: str, scene: str) -> Path:
@@ -32,9 +31,9 @@ def find_video(project: str, scene: str) -> Path:
 
 
 def process_video(project: str, scene: str) -> dict[str, Any]:
-    tools = tool_status()
-    if not tools["ready"]:
-        raise UserError("FFmpeg ve ffprobe PATH içinde bulunamadı.")
+    ffmpeg = find_ffmpeg()
+    if not ffmpeg:
+        raise UserError("FFmpeg PATH veya ComfyUI embedded ortamında bulunamadı.")
     source = find_video(project, scene)
     out_dir = scene_path(project, scene) / "repaired"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -46,7 +45,7 @@ def process_video(project: str, scene: str) -> dict[str, Any]:
         "pad=1280:720:(ow-iw)/2:(oh-ih)/2"
     )
     command = [
-        str(tools["ffmpeg"]), "-y", "-hide_banner", "-loglevel", "warning",
+        str(ffmpeg), "-y", "-hide_banner", "-loglevel", "warning",
         "-i", str(source), "-vf", vf, "-c:v", "libx264", "-preset", "slow",
         "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
         "-an", str(output),

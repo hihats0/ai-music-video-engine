@@ -1,0 +1,31 @@
+routes:
+  identity_frame:
+    primary: sdxl_identity
+    fallback: null
+  image_to_video_draft:
+    primary: wan_fast
+    fallback: wan_quality
+  image_to_video_balanced:
+    primary: wan_quality
+    fallback: wan_fast
+  image_to_video_quality:
+    primary: wan_quality
+    fallback: null
+  face_repair:
+    primary: reactor
+    fallback: face_inpaint
+  image_upscale:
+    primary: realesrgan
+    fallback: null
+  frame_interpolation:
+    primary: rife
+    fallback: null
+
+availability:
+  sdxl_identity: false
+  wan_fast: false
+  wan_quality: false
+  reactor: false
+  face_inpaint: false
+  realesrgan: false
+  rife: false

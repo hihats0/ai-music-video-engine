@@ -16,7 +16,9 @@ MANIFEST = ROOT / "configs" / "identity_models.yaml"
 
 def load_manifest() -> dict[str, Any]:
     if not MANIFEST.exists():
-        raise UserError(f"Kimlik model manifesti bulunamadı: {MANIFEST.relative_to(ROOT)}")
+        raise UserError(
+            f"Kimlik model manifesti bulunamadı: {MANIFEST.relative_to(ROOT)}"
+        )
     data = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
     if not isinstance(data, dict) or not isinstance(data.get("group"), dict):
         raise UserError("identity_models.yaml geçersiz.")
@@ -24,12 +26,19 @@ def load_manifest() -> dict[str, Any]:
 
 
 def model_root() -> Path:
-    return ROOT / str(load_manifest().get("model_root", "comfyui/runtime/models"))
+    return ROOT / str(
+        load_manifest().get("model_root", "comfyui/runtime/models")
+    )
 
 
 def custom_node_path() -> Path:
     node = load_manifest().get("custom_node", {})
-    return ROOT / str(node.get("destination", "comfyui/runtime/custom_nodes/ComfyUI_IPAdapter_plus"))
+    return ROOT / str(
+        node.get(
+            "destination",
+            "comfyui/runtime/custom_nodes/ComfyUI_IPAdapter_plus",
+        )
+    )
 
 
 def _file_status(item: dict[str, Any]) -> dict[str, Any]:
@@ -86,7 +95,33 @@ def _sha256(path: Path, block_size: int = 8 * 1024 * 1024) -> str:
     return digest.hexdigest()
 
 
-def install_custom_node(progress: Callable[[str], None] | None = None) -> Path:
+def _download_command(curl: str, target: Path, url: str) -> list[str]:
+    return [
+        curl,
+        "--location",
+        "--fail",
+        "--retry",
+        "12",
+        "--retry-all-errors",
+        "--retry-delay",
+        "5",
+        "--connect-timeout",
+        "30",
+        "--speed-limit",
+        "1024",
+        "--speed-time",
+        "60",
+        "--continue-at",
+        "-",
+        "--output",
+        str(target),
+        url,
+    ]
+
+
+def install_custom_node(
+    progress: Callable[[str], None] | None = None,
+) -> Path:
     data = load_manifest()
     node = data.get("custom_node", {})
     target = custom_node_path()
@@ -116,7 +151,8 @@ def install_custom_node(progress: Callable[[str], None] | None = None) -> Path:
         if progress:
             progress("IPAdapter custom node indiriliyor.")
         completed = subprocess.run(
-            [git, "clone", "--depth", "1", repository, str(target)], check=False
+            [git, "clone", "--depth", "1", repository, str(target)],
+            check=False,
         )
         if completed.returncode != 0:
             raise UserError(
@@ -124,7 +160,9 @@ def install_custom_node(progress: Callable[[str], None] | None = None) -> Path:
                 f"git çıkış kodu: {completed.returncode}"
             )
     if not (target / "__init__.py").exists():
-        raise UserError(f"IPAdapter custom node kurulumu doğrulanamadı: {target}")
+        raise UserError(
+            f"IPAdapter custom node kurulumu doğrulanamadı: {target}"
+        )
     return target
 
 
@@ -156,20 +194,7 @@ def download_identity_models(
         if progress:
             progress(f"İndiriliyor: {target.name}")
         completed = subprocess.run(
-            [
-                curl,
-                "--location",
-                "--fail",
-                "--retry",
-                "8",
-                "--retry-delay",
-                "5",
-                "--continue-at",
-                "-",
-                "--output",
-                str(target),
-                str(item["url"]),
-            ],
+            _download_command(curl, target, str(item["url"])),
             cwd=ROOT,
             check=False,
         )
@@ -177,13 +202,16 @@ def download_identity_models(
             raise UserError(
                 f"Kimlik modeli indirilemedi: {target.name}\n"
                 f"curl çıkış kodu: {completed.returncode}\n"
-                "Komutu tekrar çalıştırırsan kaldığı yerden devam eder."
+                "İndirme 60 saniye boyunca 1 KB/s altında kalırsa otomatik "
+                "yeniden denenir. Komutu yeniden çalıştırırsan mevcut dosyadan "
+                "devam eder."
             )
         final = _file_status(item)
         if not final["ok"]:
             raise UserError(
                 f"İndirilen dosya beklenenden küçük: {target}\n"
-                f"Boyut: {final['size_bytes']}, minimum: {final['minimum_bytes']}"
+                f"Boyut: {final['size_bytes']}, minimum: "
+                f"{final['minimum_bytes']}"
             )
         expected = str(item.get("sha256", "")).strip().lower()
         if expected:

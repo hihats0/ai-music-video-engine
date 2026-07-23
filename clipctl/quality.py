@@ -1,26 +1,26 @@
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from .core import ROOT, UserError, load_yaml, now_iso, save_yaml, scene_path
 from .generation import generate_video
+from .media_tools import find_ffmpeg
 from .postprocess import find_video
 
 
 def review_video(project: str, scene: str) -> dict[str, Any]:
-    ffmpeg = shutil.which("ffmpeg")
+    ffmpeg = find_ffmpeg()
     if not ffmpeg:
-        raise UserError("İnceleme kareleri için FFmpeg PATH içinde bulunamadı.")
+        raise UserError("İnceleme kareleri için FFmpeg bulunamadı.")
     source = find_video(project, scene)
     out_dir = scene_path(project, scene) / "repaired" / ("review_" + now_iso().replace(":", "-"))
     out_dir.mkdir(parents=True, exist_ok=True)
     pattern = out_dir / "frame_%02d.jpg"
     command = [
-        ffmpeg, "-y", "-hide_banner", "-loglevel", "warning", "-i", str(source),
+        str(ffmpeg), "-y", "-hide_banner", "-loglevel", "warning", "-i", str(source),
         "-vf", "fps=1,scale=640:-2", "-q:v", "2", str(pattern),
     ]
     run = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)

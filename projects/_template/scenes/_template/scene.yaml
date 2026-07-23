@@ -1,0 +1,64 @@
+scene:
+  id: scene_001
+  title: İsimsiz sahne
+  status: draft
+  created_at: null
+
+identity:
+  character_id: null
+  identity_strength: strict
+  preserve_face: true
+  preserve_hair: true
+  preserve_facial_hair: true
+
+composition:
+  location: ""
+  time_of_day: ""
+  wardrobe: ""
+  shot_type: medium_closeup
+  camera_angle: eye_level
+  framing: centered
+
+lighting:
+  style: ""
+  key_light: ""
+  background_light: ""
+  contrast: medium
+
+movement:
+  character_action: ""
+  camera_motion: static
+  camera_motion_strength: low
+  body_motion_strength: low
+  head_motion_strength: low
+
+style:
+  visual_style: cinematic
+  mood: ""
+  color_description: ""
+  film_texture: subtle
+
+generation:
+  preset: draft
+  duration_seconds: 4
+  alternatives: 2
+  seed: random
+  workflow: auto
+
+references:
+  pose_image: null
+  composition_image: null
+  wardrobe_image: null
+  previous_scene_frame: null
+
+rules:
+  allow_fast_head_rotation: false
+  allow_face_occlusion: false
+  allow_extreme_profile: false
+  allow_multiple_main_faces: false
+
+approval:
+  start_frame_approved: false
+  selected_start_frame: null
+  selected_video: null
+  user_notes: ""

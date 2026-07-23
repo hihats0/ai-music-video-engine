@@ -1,0 +1,23 @@
+wardrobe:
+  version: 1
+  palette:
+    dominant: []
+    accent: []
+    prohibited: []
+  characters: {}
+
+# Character example:
+# characters:
+#   sueda:
+#     looks:
+#       look_main:
+#         outerwear: "black leather jacket"
+#         top: "dark red top"
+#         bottom: "black cargo trousers"
+#         footwear: "black boots"
+#         accessories: ["thin silver earrings"]
+#         hair_and_grooming: "match approved identity reference"
+#         makeup: "natural cinematic makeup"
+#         dominant_colors: ["black"]
+#         accent_colors: ["dark red", "silver"]
+#         prohibited_substitutions: ["hat", "bright shoes"]

@@ -1,0 +1,13 @@
+cast:
+  version: 1
+  maximum_characters: 7
+  members: []
+
+# Member example:
+# - id: sueda
+#   identity_id: sueda
+#   display_name: Sueda
+#   role: lead
+#   priority: high
+#   approved_look: look_main
+#   continuity_notes: ""

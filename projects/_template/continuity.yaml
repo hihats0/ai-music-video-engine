@@ -1,0 +1,34 @@
+continuity:
+  version: 1
+  visual_language:
+    realism: photorealistic
+    lens_language: cinematic
+    camera_motion_policy: controlled
+    lighting_style: ""
+    color_palette: []
+    film_texture: subtle
+  identity:
+    preserve_face_shape: true
+    preserve_hair: true
+    preserve_facial_hair: true
+    avoid_beautification: true
+  wardrobe:
+    require_named_look: true
+    allow_unrecorded_override: false
+  group_shots:
+    maximum_characters: 7
+    maximum_high_priority_faces: 3
+    allowed_shot_types: [wide, medium_wide, full_body_group]
+    maximum_camera_motion_strength: low
+    maximum_body_motion_strength: low
+    maximum_head_motion_strength: low
+    lipsync_allowed: false
+  solo_lipsync:
+    maximum_characters: 1
+    allow_face_occlusion: false
+    maximum_head_motion_strength: low
+  postprocess:
+    preserve_source: true
+    default_target_width: 1280
+    default_target_height: 720
+    default_target_fps: 24

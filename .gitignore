@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ComfyUI local runtime and embedded Python
+comfyui/ComfyUI/
+comfyui/runtime/
+comfyui/runtime_broken_*/
+comfyui/python_embeded/
+comfyui/update/
+comfyui/user/
+
+# Models and generated media
+models/
+**/models/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.gguf
+*.bin
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.wav
+*.mp3
+*.flac
+
+# Private identities and project outputs
+identities/*/
+!identities/_template/
+!identities/_template/**
+projects/*/
+!projects/_template/
+!projects/_template/**
+
+# Logs, downloads, caches and temporary data
+logs/**/*.log
+logs/**/*.jsonl
+runtime/downloads/
+runtime/temp/*
+runtime/cache/*
+runtime/jobs/*
+runtime/locks/*
+!runtime/**/.gitkeep
+recovery/stage*_backup_*/
+recovery/**/*backup*/
+
+# Local completion markers
+STAGE_*_COMPLETE*.txt
+STAGE_*_REPAIRED*.txt
+
+# OS and editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Archives
+*.7z
+*.zip

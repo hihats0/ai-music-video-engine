@@ -1,0 +1,1 @@
+The automated check compiles all Python sources, parses the tracked YAML manifests and runs the unit tests. GPU execution, model downloads and ComfyUI node loading are intentionally verified by the local `goal install` acceptance check.

@@ -1,0 +1,40 @@
+engine:
+  name: AI Music Video Engine
+  version: 0.1.0
+  language: tr
+
+operation:
+  automatic_editing: false
+  automatic_timeline: false
+  automatic_music_processing: false
+  automatic_upload: false
+  automatic_output_deletion: false
+
+generation:
+  default_preset: draft
+  require_approved_start_frame_for_quality_video: true
+  save_prompt: true
+  save_negative_prompt: true
+  save_seed: true
+  save_workflow_copy: true
+  save_generation_metadata: true
+
+identity:
+  require_user_permission: true
+  minimum_reference_images: 1
+  recommended_reference_images: 5
+  reject_empty_identity: true
+  preserve_original_references: true
+
+failure_handling:
+  keep_failed_outputs: true
+  move_failed_outputs_to_rejected: true
+  write_failure_log: true
+  never_report_failed_job_as_success: true
+
+agents:
+  allow_codex: true
+  allow_claude: true
+  require_job_lock: true
+  allow_direct_workflow_modification: false
+  allow_automatic_custom_node_installation: false

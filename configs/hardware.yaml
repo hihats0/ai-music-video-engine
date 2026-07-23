@@ -1,0 +1,32 @@
+hardware_profile:
+  name: rtx4070_mobile_8gb_16gb
+
+gpu:
+  expected_name_contains: RTX 4070
+  vram_gb: 8
+  precision: auto
+  allow_cpu_offload: true
+
+memory:
+  system_ram_gb: 16
+  reserve_for_windows_gb: 4
+  maximum_engine_ram_gb: 11
+
+jobs:
+  maximum_parallel_gpu_jobs: 1
+  maximum_parallel_cpu_jobs: 2
+  reject_second_video_job: true
+
+video_limits:
+  maximum_width: 832
+  maximum_height: 480
+  maximum_frames: 81
+  maximum_duration_seconds: 5.1
+  default_fps: 16
+
+safety:
+  stop_on_out_of_memory: true
+  retry_after_out_of_memory: false
+  clear_vram_after_job: true
+  monitor_free_ram: true
+  minimum_free_ram_gb: 2
